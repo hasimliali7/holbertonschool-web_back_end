@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """
-Müxtəlif tipli dəyişənlərin annotasiyalarla təyin edilməsi.
+Annotated variables with specific values.
 """
 
 
-a: int = 89
+a: int = 1
 pi: float = 3.14
 i_understand_annotations: bool = True
 school: str = "Holberton"
