@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Bu modul müxtəlif tipli dəyişənləri annotasiyalarla təyin edir.
+Müxtəlif tipli dəyişənlərin annotasiyalarla təyin edilməsi.
 """
 
 
