@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Deletion-resilient hypermedia pagination module.
+Deletion-resilient hypermedia pagination
 """
 import csv
 import math
@@ -39,31 +39,33 @@ class Server:
 
     def get_hyper_index(self, index: int = None, page_size: int = 10) -> Dict:
         """
-        Return a dictionary with pagination metadata that is
-        resilient to deletions in the dataset.
+        Deletion-resilient hypermedia pagination.
+        Args:
+            index (int): starting index.
+            page_size (int): items per page.
+        Return:
+            Dict: dict with pagination metadata.
         """
-        # Dataset-i indekslənmiş şəkildə götürürük
-        dataset = self.indexed_dataset()
+        # Verilən şablona uyğun indexed_dataset-i çağırırıq
+        data_indexed = self.indexed_dataset()
         
-        # Validasiya: index mütləq daxil edilməli və limitdə olmalıdır
-        assert isinstance(index, int) and 0 <= index < len(dataset)
+        # Validasiya: index mütləq tam ədəd olmalı və mövcud olmalıdır
+        assert isinstance(index, int) and 0 <= index < len(self.dataset())
 
         data = []
         current_index = index
         
-        # Səhifə ölçüsü qədər mövcud datanı yığırıq
-        while len(data) < page_size and current_index < len(dataset):
-            item = dataset.get(current_index)
+        # page_size qədər datanı toplayırıq, silinmişləri atlayırıq
+        while len(data) < page_size and current_index < len(self.dataset()):
+            item = data_indexed.get(current_index)
             if item is not None:
                 data.append(item)
             current_index += 1
 
-        # Növbəti indeks dövrün bitdiyi yerdir
-        next_index = current_index if current_index < len(dataset) else None
-
+        # Nəticəni qaytarırıq
         return {
             "index": index,
-            "next_index": next_index,
-            "page_size": page_size,
+            "next_index": current_index,
+            "page_size": len(data),
             "data": data
         }
