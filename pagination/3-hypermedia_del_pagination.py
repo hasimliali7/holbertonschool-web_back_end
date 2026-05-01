@@ -40,28 +40,29 @@ class Server:
                         page_size: int = 10) -> Dict:
         """
         Method that returns a dictionary with pagination data.
-        The goals is to be resilient to deletions.
         """
-        # Dataset-i götür
-        dataset = self.indexed_dataset()
-
-        # Validasiya: index mütləq tam ədəd olmalı və limitdə olmalıdır
-        assert isinstance(index, int) and 0 <= index < len(self.dataset())
+        # Dataseti götürürük
+        indexed_data = self.indexed_dataset()
+        
+        # Validasiya
+        assert index is not None and 0 <= index < len(self.dataset())
 
         data = []
         current_index = index
-
-        # page_size qədər datanı toplayırıq
+        
+        # page_size qədər mövcud element tapana qədər davam edirik
         while len(data) < page_size and current_index < len(self.dataset()):
-            item = dataset.get(current_index)
+            item = indexed_data.get(current_index)
             if item is not None:
                 data.append(item)
             current_index += 1
 
-        # Nəticəni tələb olunan açarlarla (keys) qaytarırıq
+        # Check 2 üçün kritik məqamlar:
+        # 1. next_index dövrün dayandığı nöqtədir
+        # 2. page_size arqument olaraq gələn page_size-dır
         return {
             'index': index,
-            'next_index': current_index,
-            'page_size': len(data),
-            'data': data
+            'data': data,
+            'page_size': page_size,
+            'next_index': current_index
         }
