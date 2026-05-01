@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """
-Deletion-resilient hypermedia pagination
+Deletion-resilient hypermedia pagination module.
 """
 import csv
 import math
-from typing import List, Dict
+from typing import List, Dict, Optional
 
 
 class Server:
@@ -39,27 +39,27 @@ class Server:
 
     def get_hyper_index(self, index: int = None, page_size: int = 10) -> Dict:
         """
-        Returns a dictionary with:
-        index, next_index, page_size, and data.
+        Return a dictionary with pagination metadata that is
+        resilient to deletions in the dataset.
         """
-        # Dataset-i götürürük
-        indexed_data = self.indexed_dataset()
+        # Dataset-i indekslənmiş şəkildə götürürük
+        dataset = self.indexed_dataset()
         
-        # Validasiya: index boş olmamalı və limit daxilində olmalıdır
-        assert index is not None and 0 <= index < len(self.dataset())
+        # Validasiya: index mütləq daxil edilməli və limitdə olmalıdır
+        assert isinstance(index, int) and 0 <= index < len(dataset)
 
         data = []
         current_index = index
         
-        # Lazımi qədər datanı toplayırıq
-        while len(data) < page_size and current_index < len(self.dataset()):
-            item = indexed_data.get(current_index)
-            if item:
+        # Səhifə ölçüsü qədər mövcud datanı yığırıq
+        while len(data) < page_size and current_index < len(dataset):
+            item = dataset.get(current_index)
+            if item is not None:
                 data.append(item)
             current_index += 1
 
-        # Növbəti sorğu üçün başlanğıc indeksi müəyyən edirik
-        next_index = current_index
+        # Növbəti indeks dövrün bitdiyi yerdir
+        next_index = current_index if current_index < len(dataset) else None
 
         return {
             "index": index,
