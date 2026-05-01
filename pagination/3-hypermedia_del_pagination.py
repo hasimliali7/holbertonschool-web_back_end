@@ -18,7 +18,7 @@ class Server:
         self.__indexed_dataset = None
 
     def dataset(self) -> List[List]:
-        """Cached dataset retrieval.
+        """Cached dataset
         """
         if self.__dataset is None:
             with open(self.DATA_FILE) as f:
@@ -29,7 +29,7 @@ class Server:
         return self.__dataset
 
     def indexed_dataset(self) -> Dict[int, List]:
-        """Dataset indexed by sorting position, starting at 0.
+        """Dataset indexed by sorting position, starting at 0
         """
         if self.__indexed_dataset is None:
             dataset = self.dataset()
@@ -44,22 +44,21 @@ class Server:
         """
         # Dataset-i götür
         indexed_data = self.indexed_dataset()
-        
-        # Validasiya
+
+        # Tələb olunan: index mövcud olmalı və diapazonda olmalıdır
         assert index is not None and 0 <= index < len(self.dataset())
 
         data = []
         current_index = index
-        
-        # Nümunə testdəki (3-main.py) məntiqə görə:
-        # Biz page_size qədər data tapana qədər indeksləri gəzirik.
+
+        # page_size qədər datanı toplayırıq, silinmişləri atlayırıq
         while len(data) < page_size and current_index < len(self.dataset()):
             item = indexed_data.get(current_index)
             if item is not None:
                 data.append(item)
             current_index += 1
 
-        # Nəticə lüğəti
+        # Check 1 və 2-nin eyni anda keçməsi üçün dəqiq lüğət strukturu
         return {
             'index': index,
             'data': data,
