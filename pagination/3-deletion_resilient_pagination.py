@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Deletion-resilient pagination.
+Deletion-resilient pagination module.
 """
 import csv
 import math
@@ -34,26 +34,33 @@ class Server:
         return self.__indexed_dataset
 
     def get_hyper_index(self, index: int = None, page_size: int = 10) -> Dict:
-        """Returns a dict with index-based pagination info."""
+        """
+        Returns a dictionary with the following key-value pairs:
+        index, next_index, page_size, and data.
+        """
+        # Dataset-i indekslənmiş şəkildə götürürük
         dataset = self.indexed_dataset()
-        assert type(index) is int and 0 <= index < len(dataset)
+        
+        # Arqumentin doğruluğunu yoxlayırıq
+        assert isinstance(index, int) and 0 <= index < len(dataset)
 
         data = []
         current_index = index
-        count = 0
-
-        while count < page_size and current_index < len(self.dataset()):
+        
+        # Lazımi qədər məlumatı (page_size) toplayırıq
+        # Əgər bəzi indekslər siliniblərsə (dataset.get(i) None olsa), onları atlayırıq
+        while len(data) < page_size and current_index < len(dataset):
             item = dataset.get(current_index)
             if item:
                 data.append(item)
-                count += 1
             current_index += 1
 
-        next_index = current_index if current_index < len(self.dataset()) else None
+        # Növbəti indeks (əgər varsa)
+        next_index = current_index if current_index < len(dataset) else None
 
         return {
             "index": index,
-            "data": data,
-            "page_size": page_size,
-            "next_index": next_index
+            "next_index": next_index,
+            "page_size": len(data),
+            "data": data
         }
