@@ -1,2 +1,4 @@
 // lists all databases
+use logs
+db.prod.insert({name: "test"})
 show dbs
