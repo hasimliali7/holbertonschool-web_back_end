@@ -23,6 +23,11 @@ export class StudentHolberton {
   get fullStudentDescription() {
     return `${this._firstName} ${this._lastName} - ${this._holbertonClass.year} - ${this._holbertonClass.location}`;
   }
+
+  // Testin axtardığı o məşhur getter:
+  get holbertonClass() {
+    return this._holbertonClass;
+  }
 }
 
 const class2019 = new HolbertonClass(2019, 'San Francisco');
