@@ -1,3 +1,5 @@
+import getBudgetObject from './7-getBudgetObject';
+
 export default function getBudgetForKing(budget) {
   return {
     [`income-${budget.income}`]: budget.income,
