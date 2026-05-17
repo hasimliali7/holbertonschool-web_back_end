@@ -24,7 +24,6 @@ export class StudentHolberton {
     return `${this._firstName} ${this._lastName} - ${this._holbertonClass.year} - ${this._holbertonClass.location}`;
   }
 
-  // Testin axtardığı o məşhur getter:
   get holbertonClass() {
     return this._holbertonClass;
   }
